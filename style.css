@@ -81,7 +81,7 @@ select{
     padding:10px;
     border-radius:35px;
     appearance: none;
-    background-image: url(Images/dropdown.png);
+    background-image: url("https://res.cloudinary.com/dhzux91au/image/upload/v1728387759/dropdown_j4npt3.png");
     background-repeat: no-repeat;
     background-size:13px;
     background-position-x:calc(100% - 15px);
