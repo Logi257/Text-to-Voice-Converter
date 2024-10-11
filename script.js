@@ -1,27 +1,40 @@
-let speech=new SpeechSynthesisUtterance();
+let speech = new SpeechSynthesisUtterance();
 
-let voices=[];
+let voices = [];
+let voiceSelect = document.querySelector("select");
 
-let voiceSelect=document.querySelector("select");
+// Function to load voices
+function populateVoices() {
+    voices = window.speechSynthesis.getVoices();
 
-window.speechSynthesis.onvoiceschanged=()=>{
-    voices=window.speechSynthesis.getVoices();
-    speech.voice=voices[0];
+    // Clear the select options
+    voiceSelect.innerHTML = "";
 
-    for(let i=0;i<voices.length;i++){
-        voiceSelect.options[i]=new Option(voices[i].name,i);
-    }
+    voices.forEach((voice, i) => {
+        let option = document.createElement("option");
+        option.value = i;
+        option.textContent = voice.name;
+        voiceSelect.appendChild(option);
+    });
 
-
-
+    // Set the default voice
+    speech.voice = voices[0];
 }
 
-voiceSelect.addEventListener("change",()=>{
-    speech.voice=voices[voiceSelect.value];
+// Check if voices are already loaded
+if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = populateVoices;
+} else {
+    // Fallback for browsers that may not trigger the onvoiceschanged event
+    setTimeout(populateVoices, 100);
+}
 
+// Change the voice when selecting a different option
+voiceSelect.addEventListener("change", () => {
+    speech.voice = voices[voiceSelect.value];
 });
 
-document.querySelector("button").addEventListener(("click"),()=>{
-    speech.text=document.querySelector("textarea").value;
+document.querySelector("button").addEventListener("click", () => {
+    speech.text = document.querySelector("textarea").value;
     window.speechSynthesis.speak(speech);
 });
